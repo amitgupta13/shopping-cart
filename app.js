@@ -4,11 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const expressHbs = require('express-handlebars');
-
 var indexRouter = require('./routes/index');
+const seed = require('./seed/product-seed');
 
 var app = express();
 
+require('./startup/db')();
 // view engine setup
 app.engine('.hbs', expressHbs({defaultLayout:'layout', extname:'.hbs'}));
 app.set('view engine', '.hbs');
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+seed();
 
 app.use('/', indexRouter);
 
